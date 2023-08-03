@@ -1,12 +1,14 @@
 
 const RestaurantCard = (props) => {
+  const { resData } = props;
+  console.log("reached to restocrad")
     const{ cloudinaryImageId,
       name,
       cuisines,
-      area,
+      locality,
       lastMileTravelString,
-      costForTwoString,
-      avgRating}=props.resData.data;
+      costForTwo,
+      avgRating}=resData;
     return (<div className="w-[200px] p-2 m-2 shadow-lg bg-slate-400"  style={{ backgroundColor: "#f0f0f0"}}>
     
       <img  className="res-logo" alt="logo"  src={
@@ -15,11 +17,11 @@ const RestaurantCard = (props) => {
           }/>
         <h2 className="font-bold">{name}</h2>
         <h4>{cuisines.join(", ")}</h4>
-        <h4>{area}</h4>
+        <h4>{locality}</h4>
         <span>
         <h4><i class="fa-solid fa-star"></i>{avgRating}</h4>
           <h4>{lastMileTravelString}</h4>
-          <h4>{costForTwoString}</h4>
+          <h4>{costForTwo}</h4>
         </span>
       
     </div>

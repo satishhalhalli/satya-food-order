@@ -5,7 +5,7 @@ import FoodItem from './FoodItem';
 import { clearCart } from '../utils/cartSlice';
 
 const Cart = () => {
-  const cartItems = useSelector((store) => store.cart.items);
+  const cartItems = useSelector((store) => store.cart.cartItems);
   const dispatch = useDispatch();
   const [isOrderPlaced, setIsOrderPlaced] = useState(false);
 
