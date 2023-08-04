@@ -10,6 +10,7 @@ import { IMG_cdn_URL } from '../utils/constants';
 const RestaurantMenu = () => {
   const { resId } = useParams();
   const [resInfo, setResInfo] = useState(null);
+  const [loading, setLoading] = useState(true); // New loading state
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -17,17 +18,27 @@ const RestaurantMenu = () => {
   }, []);
 
   const addFoodItem = (item) => {
-    dispatch(addItem(item));
+    console.log("moving from menu", item);
+    dispatch(addItem(item.card.info));
   };
 
   const getRestaurantInfo = async () => {
-    const data = await fetch(MENU_API + resId);
-    const json = await data.json();
-    console.log(json);
-    setResInfo(json.data);
+    try {
+      const data = await fetch(MENU_API + resId);
+      const json = await data.json();
+      console.log(json);
+      setResInfo(json.data);
+      setLoading(false); // Set loading to false once data is available
+    } catch (error) {
+      console.error("Error fetching restaurant info:", error);
+      setResInfo(-1); // Set -1 to indicate an error in fetching data
+      setLoading(false);
+    }
   };
 
-  if (resInfo === null) return <Shimmer />;
+  if (loading) return <Shimmer />; // Show shimmer or a loading indicator while waiting for data
+
+  if (resInfo === -1) return <p>Error loading restaurant data.</p>; // Show an error message if there was an error fetching data
 
   const { name, cuisines, costForTwoMessage, cloudinaryImageId } =
     resInfo.cards[0].card.card.info;
@@ -43,8 +54,7 @@ const RestaurantMenu = () => {
         <h3 className="text-sm">{costForTwoMessage}</h3>
       </div>
 
-      <div>
-        {/* <h2 className="text-2xl font-extrabold">Menu</h2> */}
+      <div className='px-5'>
         <h2 className="text-2xl font-extrabold">Menu</h2>
         <ul>
           {itemCards.map((item) => (
@@ -63,9 +73,10 @@ const RestaurantMenu = () => {
           ))}
         </ul>
       </div>
+
+      
     </div>
   );
 };
 
 export default RestaurantMenu;
-
